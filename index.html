@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gusti - Website Personal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        header {
+            background-color: #eeaa0b;
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .nav-links a.active {
+            border-bottom: 3px solid white;
+            padding-bottom: 5px;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            transition: 0.3s;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            padding: 80px 2rem 2rem;
+            transition: right 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #eeaa0b;
+            background: none;
+            border: none;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-menu a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: #eeaa0b;
+            color: white;
+        }
+
+        .sidebar-info {
+            padding-top: 2rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .sidebar-info h3 {
+            color: #eeaa0b;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-info p {
+            margin-bottom: 0.8rem;
+            color: #666;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 998;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #eeaa0b 0%, #ffc107 100%);
+            color: white;
+            text-align: center;
+            padding: 150px 2rem 100px;
+            margin-top: 70px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background-color: white;
+            color: #eeaa0b;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .about {
+            padding: 100px 2rem;
+            background-color: #f8f9fa;
+        }
+
+        .portfolio {
+            padding: 100px 2rem;
+            background-color: white;
+        }
+
+        .portfolio-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .portfolio h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: #eeaa0b;
+            text-align: center;
+        }
+
+        .portfolio-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 4rem;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .portfolio-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(238, 170, 11, 0.3);
+        }
+
+        .portfolio-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #eeaa0b 0%, #ffc107 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .portfolio-content {
+            padding: 1.5rem;
+        }
+
+        .portfolio-content h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 0.8rem;
+        }
+
+        .portfolio-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .portfolio-tag {
+            background-color: #f0f0f0;
+            color: #eeaa0b;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 2000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            background: #eeaa0b;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #eeaa0b 0%, #ffc107 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-body h2 {
+            font-size: 2rem;
+            color: #eeaa0b;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .modal-body .portfolio-tags {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            color: #eeaa0b;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            border: 10px solid #eeaa0b;
+            object-fit: cover;
+            box-shadow: 0 20px 60px rgba(238, 170, 11, 0.3);
+        }
+
+        .profile-placeholder {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #eeaa0b 0%, #ffc107 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            margin: 0 auto;
+            border: 10px solid white;
+            box-shadow: 0 20px 60px rgba(238, 170, 11, 0.3);
+        }
+
+        .skills {
+            margin-top: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .skill-tag {
+            background-color: #eeaa0b;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        footer {
+            background-color: #2d2d2d;
+            color: white;
+            padding: 60px 2rem 30px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            color: #eeaa0b;
+            font-size: 1.4rem;
+        }
+
+        .footer-section p {
+            color: #ddd;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            list-style: none;
+        }
+
+        .contact-info li {
+            margin-bottom: 1rem;
+            color: #ddd;
+            font-size: 1.05rem;
+        }
+
+        .contact-info a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-info a:hover {
+            color: #eeaa0b;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background-color: #eeaa0b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-3px);
+            background-color: #ffc107;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #555;
+            color: #ddd;
+            font-size: 1rem;
+        }
+
+        /* Tablet Responsive */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .about-content {
+                gap: 3rem;
+            }
+
+            .profile-placeholder,
+            .profile-img {
+                width: 300px;
+                height: 300px;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 2rem;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero {
+                padding: 120px 1.5rem 80px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .about {
+                padding: 60px 1.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .about-text h2 {
+                font-size: 2rem;
+            }
+
+            .profile-placeholder,
+            .profile-img {
+                width: 250px;
+                height: 250px;
+                font-size: 6rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            nav {
+                padding: 0 1.5rem;
+            }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+
+            .about-text h2 {
+                font-size: 1.7rem;
+            }
+
+            .about-text p {
+                font-size: 1rem;
+            }
+
+            .profile-placeholder,
+            .profile-img {
+                width: 200px;
+                height: 200px;
+                font-size: 5rem;
+            }
+
+            .skill-tag {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <header>
+        <nav>
+            <div class="logo">Gusti</div>
+            <ul class="nav-links">
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#about">Tentang</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#contact">Kontak</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <button class="sidebar-close" onclick="closeSidebar()">&times;</button>
+        
+        <ul class="sidebar-menu">
+            <li><a href="#home" onclick="closeSidebar()">🏠 Beranda</a></li>
+            <li><a href="#about" onclick="closeSidebar()">👤 Tentang Saya</a></li>
+            <li><a href="#portfolio" onclick="closeSidebar()">💼 Portfolio</a></li>
+            <li><a href="#contact" onclick="closeSidebar()">📧 Kontak</a></li>
+        </ul>
+        
+        <div class="sidebar-info">
+            <h3>Info Cepat</h3>
+            <p><strong>Nama:</strong> Gusti</p>
+            <p><strong>Profesi:</strong> Developer & Designer</p>
+            <p><strong>Lokasi:</strong> Surabaya, Indonesia</p>
+            <p><strong>Status:</strong> Tersedia untuk proyek</p>
+        </div>
+    </aside>
+
+    <section id="home" class="hero">
+        <h1>Halo, Saya Gusti</h1>
+        <p>Developer & Designer yang menciptakan pengalaman digital yang menarik</p>
+        <a href="#about" class="btn">Lihat Profil Saya</a>
+    </section>
+
+    <section id="portfolio" class="portfolio">
+        <div class="portfolio-container">
+            <h2 class="fade-in">Portfolio Saya</h2>
+            <p class="portfolio-subtitle fade-in">Beberapa proyek yang telah saya kerjakan</p>
+            
+            <div class="portfolio-grid">
+                <div class="portfolio-item scale-in" onclick="openModal(1)">
+                    <div class="portfolio-image">
+                        🛒
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>E-Commerce Platform</h3>
+                        <p>Platform e-commerce modern dengan fitur lengkap untuk toko online, termasuk sistem pembayaran dan manajemen produk.</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">React</span>
+                            <span class="portfolio-tag">Node.js</span>
+                            <span class="portfolio-tag">MongoDB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item scale-in" onclick="openModal(2)">
+                    <div class="portfolio-image">
+                        📱
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Mobile Banking App</h3>
+                        <p>Aplikasi mobile banking dengan antarmuka yang intuitif dan fitur keamanan tingkat tinggi untuk transaksi finansial.</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">React Native</span>
+                            <span class="portfolio-tag">Firebase</span>
+                            <span class="portfolio-tag">UI/UX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item scale-in" onclick="openModal(3)">
+                    <div class="portfolio-image">
+                        🎨
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Creative Portfolio Website</h3>
+                        <p>Website portfolio untuk creative agency dengan animasi smooth dan desain yang eye-catching untuk showcase karya.</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">HTML5</span>
+                            <span class="portfolio-tag">CSS3</span>
+                            <span class="portfolio-tag">JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item scale-in" onclick="openModal(4)">
+                    <div class="portfolio-image">
+                        📊
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Dashboard Analytics</h3>
+                        <p>Dashboard analytics real-time dengan visualisasi data yang komprehensif untuk monitoring performa bisnis.</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">Vue.js</span>
+                            <span class="portfolio-tag">D3.js</span>
+                            <span class="portfolio-tag">API</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item scale-in" onclick="openModal(5)">
+                    <div class="portfolio-image">
+                        🍕
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Food Delivery App</h3>
+                        <p>Aplikasi food delivery dengan sistem tracking real-time dan integrasi dengan berbagai metode pembayaran.</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">Flutter</span>
+                            <span class="portfolio-tag">Google Maps</span>
+                            <span class="portfolio-tag">Payment Gateway</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item scale-in" onclick="openModal(6)">
+                    <div class="portfolio-image">
+                        🎓
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Learning Management System</h3>
+                        <p>Platform pembelajaran online dengan fitur video streaming, quiz interaktif, dan sistem sertifikasi digital.</p>
+                        <div class="portfolio-tags">
+                            <span class="portfolio-tag">Laravel</span>
+                            <span class="portfolio-tag">MySQL</span>
+                            <span class="portfolio-tag">Bootstrap</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-image" id="modalImage"></div>
+            <div class="modal-body">
+                <h2 id="modalTitle"></h2>
+                <p id="modalDescription"></p>
+                <div class="portfolio-tags" id="modalTags"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="about-container">
+            <div class="about-content">
+                <div class="about-text slide-in-left">
+                    <h2>Tentang Saya</h2>
+                    <p>Saya adalah seorang developer dan designer yang bersemangat dengan kecintaan untuk menciptakan solusi elegan untuk masalah yang kompleks. Dengan pengalaman dalam pengembangan web, saya mengkhususkan diri dalam membangun aplikasi yang responsif dan ramah pengguna yang membuat perbedaan.</p>
+                    <p>Ketika tidak sedang coding, Anda dapat menemukan saya menjelajahi teknologi baru, berkontribusi pada proyek open-source, atau menikmati secangkir kopi sambil membuat sketsa ide besar berikutnya. Saya percaya bahwa teknologi dapat mengubah dunia menjadi lebih baik.</p>
+                    <div class="skills">
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">UI/UX Design</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">CSS</span>
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">Python</span>
+                    </div>
+                </div>
+                <div class="about-image slide-in-right">
+                    <!-- Ganti dengan URL gambar Anda -->
+                    <img src="images/1.png" alt="Gusti" class="profile-img"> 
+                    <div class="profile-placeholder">👨‍💻</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-content fade-in">
+            <div class="footer-section">
+                <h3>Gusti</h3>
+                <p>Mengubah ide menjadi kenyataan melalui kode dan desain. Mari membangun sesuatu yang luar biasa bersama-sama.</p>
+                <div class="social-links">
+                    <a href="#" title="LinkedIn">in</a>
+                    <a href="#" title="GitHub">gh</a>
+                    <a href="#" title="Instagram">ig</a>
+                    <a href="#" title="Twitter">tw</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Menu</h3>
+                <ul class="contact-info">
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#about">Tentang</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#contact">Kontak</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Kontak</h3>
+                <ul class="contact-info">
+                    <li>📧 gusti@example.com</li>
+                    <li>📱 +62 812-3456-7890</li>
+                    <li>📍 Surabaya, Indonesia</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom fade-in">
+            <p>&copy; 2025 Gusti. Hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Portfolio modal data
+        const portfolioData = {
+            1: {
+                icon: '🛒',
+                title: 'E-Commerce Platform',
+                description: 'Platform e-commerce modern yang dibangun dengan teknologi terkini. Fitur lengkap meliputi manajemen produk, keranjang belanja, sistem pembayaran terintegrasi, tracking pengiriman, dan dashboard admin yang powerful. Desain responsive dan user-friendly untuk pengalaman berbelanja yang optimal di semua device.',
+                tags: ['React', 'Node.js', 'MongoDB', 'Stripe', 'Redux']
+            },
+            2: {
+                icon: '📱',
+                title: 'Mobile Banking App',
+                description: 'Aplikasi mobile banking dengan fokus pada keamanan dan kemudahan penggunaan. Fitur mencakup transfer antar bank, pembayaran tagihan, e-wallet, investasi, dan monitoring transaksi real-time. Dilengkapi dengan biometric authentication dan enkripsi end-to-end untuk keamanan maksimal.',
+                tags: ['React Native', 'Firebase', 'UI/UX', 'Security', 'API Integration']
+            },
+            3: {
+                icon: '🎨',
+                title: 'Creative Portfolio Website',
+                description: 'Website portfolio untuk creative agency yang menampilkan karya-karya dengan cara yang menarik dan interaktif. Menggunakan animasi smooth, parallax effects, dan transisi yang elegan. Desain minimalis namun impactful dengan fokus pada visual storytelling untuk memukau klien potensial.',
+                tags: ['HTML5', 'CSS3', 'JavaScript', 'GSAP', 'Responsive Design']
+            },
+            4: {
+                icon: '📊',
+                title: 'Dashboard Analytics',
+                description: 'Dashboard analytics comprehensive untuk monitoring dan analisis data bisnis secara real-time. Menampilkan berbagai metrik penting dengan visualisasi data yang interaktif menggunakan charts dan graphs. Fitur filtering, export data, dan customizable widgets untuk kebutuhan analisis yang beragam.',
+                tags: ['Vue.js', 'D3.js', 'API', 'WebSocket', 'Data Visualization']
+            },
+            5: {
+                icon: '🍕',
+                title: 'Food Delivery App',
+                description: 'Aplikasi food delivery yang menghubungkan pelanggan dengan berbagai restoran favorit. Fitur meliputi pencarian restoran, customisasi pesanan, tracking pengiriman real-time dengan GPS, multiple payment methods, rating & review, dan loyalty program. Interface yang intuitif membuat proses pemesanan menjadi cepat dan mudah.',
+                tags: ['Flutter', 'Google Maps', 'Payment Gateway', 'Real-time Tracking', 'Push Notification']
+            },
+            6: {
+                icon: '🎓',
+                title: 'Learning Management System',
+                description: 'Platform pembelajaran online lengkap untuk institusi pendidikan dan corporate training. Fitur mencakup video streaming berkualitas tinggi, quiz dan assignment interaktif, discussion forum, progress tracking, sistem penilaian otomatis, dan sertifikasi digital. Dashboard yang komprehensif untuk instruktur dan student.',
+                tags: ['Laravel', 'MySQL', 'Bootstrap', 'Video Streaming', 'Certificate System']
+            }
+        };
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        function openModal(id) {
+            const modal = document.getElementById('modal');
+            const data = portfolioData[id];
+            
+            document.getElementById('modalImage').innerHTML = data.icon;
+            document.getElementById('modalTitle').textContent = data.title;
+            document.getElementById('modalDescription').textContent = data.description;
+            
+            const tagsContainer = document.getElementById('modalTags');
+            tagsContainer.innerHTML = data.tags.map(tag => 
+                `<span class="portfolio-tag">${tag}</span>`
+            ).join('');
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll Animation Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
+            animatedElements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
